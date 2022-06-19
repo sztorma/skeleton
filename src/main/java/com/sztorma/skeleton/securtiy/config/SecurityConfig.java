@@ -37,18 +37,18 @@ public class SecurityConfig {
                 .anyRequest().denyAll())
                 .httpBasic(Customizer.withDefaults());
 
-        addHttpAuthFilter(http);
+        addHttpAuthenticationFilter(http);
         http.addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     /**
-     * adding Auth filter with auth URL
+     * adding Authentication filter with auth URL
      * 
      * @param http
      * @throws Exception
      */
-    private void addHttpAuthFilter(HttpSecurity http) throws Exception {
+    private void addHttpAuthenticationFilter(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter authFilter = new JwtAuthenticationFilter(
                 authenticationManager(authenticationConfiguration));
         authFilter.setFilterProcessesUrl(AUTH_PATH);
