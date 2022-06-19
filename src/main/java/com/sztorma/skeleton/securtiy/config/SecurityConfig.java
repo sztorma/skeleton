@@ -40,7 +40,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // TODO integration test for authentication
     /**
      * adding Auth filter with auth URL
      * 
