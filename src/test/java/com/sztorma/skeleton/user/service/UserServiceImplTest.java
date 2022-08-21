@@ -5,6 +5,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sztorma.skeleton.user.dao.UserDao;
+import com.sztorma.skeleton.user.entity.ERole;
+import com.sztorma.skeleton.user.entity.Role;
 import com.sztorma.skeleton.user.entity.User;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,6 +27,22 @@ public class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
+
+    @Test
+    @DisplayName("Find userdetails succesfully")
+    public void testLoadUserByUsername() {
+        User userEntity = new User();
+        userEntity.setUsername("foo");
+        userEntity.setRoles(Set.of(new Role(ERole.ADMIN)));
+        userEntity.setPassword("password");
+
+        when(userDao.findUserByUsername("foo")).thenReturn(userEntity);
+
+        org.springframework.security.core.userdetails.UserDetails userDetail = userServiceImpl
+                .loadUserByUsername("foo");
+
+        assertEquals("foo", userDetail.getUsername());
+    }
 
     @Test
     @DisplayName("find user successfully")
