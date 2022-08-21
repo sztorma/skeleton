@@ -7,12 +7,14 @@ import static org.mockito.Mockito.when;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.sztorma.skeleton.user.dao.UserDao;
 import com.sztorma.skeleton.user.entity.ERole;
@@ -42,6 +44,17 @@ public class UserServiceImplTest {
                 .loadUserByUsername("foo");
 
         assertEquals("foo", userDetail.getUsername());
+    }
+
+    @Test
+    @DisplayName("No found userdetails exception")
+    public void testLoadUserByUsernameUsernameNotFound() {
+        when(userDao.findUserByUsername("foo")).thenReturn(null);
+        Assertions.assertThrows(UsernameNotFoundException.class,
+                () -> {
+                    userServiceImpl
+                            .loadUserByUsername("foo");
+                });
     }
 
     @Test
